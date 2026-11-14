@@ -46,7 +46,6 @@ def convert_png_to_pdf():
 
 
 # Создаем графическое окно
-root = tk.Tk()
 root.title("Конвертер PNG в PDF")
 root.geometry("350x200")
 root.resizable(False, False)
