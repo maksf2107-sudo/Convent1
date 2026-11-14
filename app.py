@@ -1,4 +1,3 @@
-
 from PIL import Image
 
 
@@ -44,8 +43,6 @@ def convert_png_to_pdf():
     if success_count > 0:
         messagebox.showinfo("Успех", f"Успешно конвертировано и сохранено файлов: {success_count}")
 
-# Инструкция в окне
-label.pack()
 
 # Кнопка запуска конвертации
 btn.pack(pady=10)
