@@ -43,9 +43,5 @@ def convert_png_to_pdf():
     if success_count > 0:
         messagebox.showinfo("Успех", f"Успешно конвертировано и сохранено файлов: {success_count}")
 
-
-# Кнопка запуска конвертации
-btn.pack(pady=10)
-
 # Запуск главного цикла окна
 root.mainloop()
