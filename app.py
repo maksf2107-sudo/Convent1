@@ -1,44 +1,51 @@
+import streamlit as st
 from PIL import Image
+import io
 
+st.title("Конвертер PNG в PDF")
+st.write("Загрузите изображения в формате PNG, чтобы объединить их в один PDF-файл.")
 
-def convert_png_to_pdf():
-    # Открываем диалоговое окно для выбора исходных PNG-файлов
-    file_paths = filedialog.askopenfilenames(
-        title="Выберите PNG файлы",
-        filetypes=[("PNG files", "*.png")]
-    )
+# Компонент для загрузки файлов (поддерживает выбор нескольких картинок)
+uploaded_files = st.file_uploader(
+    "Выберите PNG файлы", type=["png", "jpg", "jpeg"], accept_multiple_files=True
+)
 
-    if not file_paths:
-        return
+if uploaded_files:
+  st.success(f"Загружено файлов: {len(uploaded_files)}")
 
-    success_count = 0
-    for file_path in file_paths:
-        try:
-            # Открываем изображение через Pillow
-            image = Image.open(file_path)
+  # Кнопка для запуска конвертации
+  if st.button("Конвертировать в PDF"):
+    try:
+      images = []
+      for file in uploaded_files:
+        img = Image.open(file)
+        # Конвертируем в RGB (необходимо для сохранения в PDF формата RGB)
+        if img.mode != "RGB":
+          img = img.convert("RGB")
+        images.append(img)
 
-            # Конвертируем в RGB (если был альфа-канал)
-            if image.mode == 'RGBA':
-                image = image.convert('RGB')
+      # Создаем буфер в памяти для сохранения PDF
+      pdf_buffer = io.BytesIO()
 
-            # Предлагаем пользователю выбрать место и имя для сохранения готового PDF
-            pdf_path = filedialog.asksaveasfilename(
-                title="Сохранить как PDF",
-                defaultextension=".pdf",
-                filetypes=[("PDF files", "*.pdf")],
-                initialfile="converted.pdf"  # Имя по умолчанию
-            )
+      if images:
+        # Сохраняем первую картинку с добавлением остальных страниц
+        images[0].save(
+            pdf_buffer,
+            format="PDF",
+            save_all=True,
+            append_images=images[1:],
+            resolution=100.0,
+        )
+        pdf_buffer.seek(0)
 
-            # Если пользователь нажал «Отмена» в окне сохранения, пропускаем этот файл
-            if not pdf_path:
-                continue
+        st.success("PDF успешно создан!")
 
-            # Сохраняем в выбранный файл
-            image.save(pdf_path, "PDF", resolution=100.0)
-            success_count += 1
-
-        except Exception as e:
-            print(f"Ошибка при конвертации {file_path}: {e}")
-
-    if success_count > 0:
-        messagebox.showinfo("Успех", f"Успешно конвертировано и сохранено файлов: {success_count}")
+        # Кнопка скачивания готового файла
+        st.download_button(
+            label="Скачать готовый PDF",
+            data=pdf_buffer,
+            file_name="converted_images.pdf",
+            mime="application/pdf",
+        )
+    except Exception as e:
+      st.error(f"Произошла ошибка при конвертации: {e}")
