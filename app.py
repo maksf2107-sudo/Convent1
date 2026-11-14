@@ -44,12 +44,6 @@ def convert_png_to_pdf():
     if success_count > 0:
         messagebox.showinfo("Успех", f"Успешно конвертировано и сохранено файлов: {success_count}")
 
-
-# Создаем графическое окно
-root.title("Конвертер PNG в PDF")
-root.geometry("350x200")
-root.resizable(False, False)
-
 # Инструкция в окне
 label = tk.Label(root, text="Нажмите кнопку ниже, чтобы\nвыбрать и сохранить PNG как PDF", font=("Arial", 11), pady=20)
 label.pack()
