@@ -45,12 +45,9 @@ def convert_png_to_pdf():
         messagebox.showinfo("Успех", f"Успешно конвертировано и сохранено файлов: {success_count}")
 
 # Инструкция в окне
-label = tk.Label(root, text="Нажмите кнопку ниже, чтобы\nвыбрать и сохранить PNG как PDF", font=("Arial", 11), pady=20)
 label.pack()
 
 # Кнопка запуска конвертации
-btn = tk.Button(root, text="Выбрать PNG и сохранить PDF", command=convert_png_to_pdf, bg="#4CAF50", fg="white",
-                font=("Arial", 10, "bold"), padx=10, pady=5)
 btn.pack(pady=10)
 
 # Запуск главного цикла окна
